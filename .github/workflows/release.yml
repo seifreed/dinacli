@@ -70,6 +70,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/* \
+          gh release create "${GITHUB_REF_NAME}" dist/* --repo "${GITHUB_REPOSITORY}" \
             --title "dinahosting-cli ${GITHUB_REF_NAME}" \
             --notes "First public release of dinahosting-cli, a Python CLI and client for the Dinahosting API."
