@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
+import sys
 from collections.abc import Mapping, Sequence
 from http.client import HTTPConnection, HTTPException, HTTPSConnection
 from ipaddress import ip_address
@@ -17,6 +18,7 @@ _CONNECTION_TYPES: Mapping[str, type[HTTPConnection]] = {
     "http": HTTPConnection,
     "https": HTTPSConnection,
 }
+_MAX_JSON_INTEGER_DIGITS = sys.int_info.default_max_str_digits
 
 
 class HttpTransport:
@@ -96,6 +98,7 @@ def _decode_json(body: bytes) -> Any:
         object_pairs_hook=_json_object,
         parse_constant=_invalid_json_constant,
         parse_float=_finite_json_number,
+        parse_int=_bounded_json_integer,
     )
 
 
@@ -117,6 +120,12 @@ def _finite_json_number(value: str) -> float:
     if not isfinite(number):
         raise json.JSONDecodeError("JSON number is not finite", value, 0)
     return number
+
+
+def _bounded_json_integer(value: str) -> int:
+    if len(value.lstrip("-")) > _MAX_JSON_INTEGER_DIGITS:
+        raise json.JSONDecodeError("JSON integer is too large", value, 0)
+    return int(value)
 
 
 def _is_loopback(host: str) -> bool:

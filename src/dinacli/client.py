@@ -19,7 +19,7 @@ class ApiClient:
 
     def call(self, command: str, /, **parameters: Any) -> DinaResponse:
         """Call a documented Dinahosting command and return its decoded response."""
-        if not command:
+        if not isinstance(command, str) or not command.strip():
             raise ValueError("Command is required")
         payload = self._transport.post(
             {**parameters, "command": command, "responseType": "Json"},

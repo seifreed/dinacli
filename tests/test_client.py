@@ -3,11 +3,13 @@ from __future__ import annotations
 import base64
 import json
 import math
+import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
+from typing import cast
 from urllib.parse import parse_qs
 
 import pytest
@@ -157,6 +159,14 @@ def test_call_rejects_cyclic_parameters() -> None:
             )
 
 
+def test_call_rejects_invalid_command_values() -> None:
+    client = DinaClient("user", "password", endpoint="http://127.0.0.1:1")
+    with pytest.raises(ValueError):
+        client.call(" ")
+    with pytest.raises(ValueError):
+        client.call(cast(str, 1))
+
+
 def test_api_and_protocol_errors() -> None:
     with api_server() as (endpoint, _):
         client = DinaClient("user", "password", endpoint=f"{endpoint}/api-error")
@@ -182,10 +192,15 @@ def test_api_and_protocol_errors() -> None:
             DinaClient("user", "password", endpoint=f"{endpoint}/large-number").call(
                 "Test"
             )
-        with pytest.raises(DinaProtocolError):
-            DinaClient("user", "password", endpoint=f"{endpoint}/large-integer").call(
-                "Test"
-            )
+        maximum_digits = sys.get_int_max_str_digits()
+        try:
+            sys.set_int_max_str_digits(0)
+            with pytest.raises(DinaProtocolError):
+                DinaClient(
+                    "user", "password", endpoint=f"{endpoint}/large-integer"
+                ).call("Test")
+        finally:
+            sys.set_int_max_str_digits(maximum_digits)
         require(
             DinaClient("user", "password", endpoint=f"{endpoint}/float")
             .call("Test")
