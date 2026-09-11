@@ -22,7 +22,7 @@ class ApiClient:
         if not command:
             raise ValueError("Command is required")
         payload = self._transport.post(
-            {"command": command, "responseType": "Json", **parameters},
+            {**parameters, "command": command, "responseType": "Json"},
             self._settings.user,
             self._settings.password,
         )

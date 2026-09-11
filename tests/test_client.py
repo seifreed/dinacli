@@ -114,6 +114,8 @@ def test_call_sends_basic_auth_and_parameters() -> None:
             "user", "password", endpoint=f"{endpoint}/success?origin=test"
         ).call(
             "System_GetRequestTypes",
+            command="Overridden_Command",
+            responseType="Xml",
             item=["one", "two"],
             contact={"admin": {"email": "admin@example.test"}},
             enabled=True,
@@ -389,8 +391,20 @@ def test_cli_lists_and_describes_documented_commands(
 
 def test_cli_treats_nonstandard_json_constants_as_text() -> None:
     require(
-        _parameters(["value=NaN", "positive=Infinity", "negative=-Infinity"]),
-        {"value": "NaN", "positive": "Infinity", "negative": "-Infinity"},
+        _parameters(
+            [
+                "value=NaN",
+                "positive=Infinity",
+                "negative=-Infinity",
+                "overflow=1e10000",
+            ]
+        ),
+        {
+            "value": "NaN",
+            "positive": "Infinity",
+            "negative": "-Infinity",
+            "overflow": "1e10000",
+        },
     )
 
 

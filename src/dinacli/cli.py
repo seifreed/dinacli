@@ -8,6 +8,7 @@ import os
 import sys
 from collections.abc import Callable, Sequence
 from importlib.metadata import version
+from math import isfinite
 from typing import Any, NoReturn, TextIO
 
 from .bootstrap import DinaClient
@@ -119,7 +120,9 @@ def _parameters(values: Sequence[str]) -> dict[str, Any]:
             raise ValueError(f"Parameter specified more than once: {name}")
         try:
             parameters[name] = json.loads(
-                raw_value, parse_constant=_invalid_json_constant
+                raw_value,
+                parse_constant=_invalid_json_constant,
+                parse_float=_finite_json_number,
             )
         except json.JSONDecodeError:
             parameters[name] = raw_value
@@ -128,6 +131,13 @@ def _parameters(values: Sequence[str]) -> dict[str, Any]:
 
 def _invalid_json_constant(value: str) -> NoReturn:
     raise json.JSONDecodeError("Invalid JSON constant", value, 0)
+
+
+def _finite_json_number(value: str) -> float:
+    number = float(value)
+    if not isfinite(number):
+        raise json.JSONDecodeError("JSON number is not finite", value, 0)
+    return number
 
 
 def _client(arguments: argparse.Namespace) -> DinaClient:
