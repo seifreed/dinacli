@@ -21,7 +21,7 @@ from dinacli import (
     DinaProtocolError,
 )
 from dinacli.api import Command, CommandGroup
-from dinacli.cli import main
+from dinacli.cli import _parameters, main
 from dinacli.models import response_from_payload
 
 
@@ -268,6 +268,11 @@ def test_configuration_sources_and_validation(tmp_path: Path) -> None:
         DinaClient("user", "password", endpoint="https://host:")
     with pytest.raises(DinaConfigurationError):
         DinaClient("user", "password", endpoint="https://[invalid")
+    with pytest.raises(DinaConfigurationError):
+        DinaClient("user", "password", endpoint="https://example.test:0")
+    config.write_text("[dina]\nuser = 'user'\npassword = 'password'\ntimeout = true\n")
+    with pytest.raises(DinaConfigurationError):
+        DinaClient.from_config(config, {})
     config.write_text(f"[dina]\nendpoint = '{endpoint}'\n")
     environment_only = DinaClient.from_config(
         config,
@@ -379,6 +384,13 @@ def test_cli_lists_and_describes_documented_commands(
             "optional": [],
             "required": ["domain", "hostname", "ip"],
         },
+    )
+
+
+def test_cli_treats_nonstandard_json_constants_as_text() -> None:
+    require(
+        _parameters(["value=NaN", "positive=Infinity", "negative=-Infinity"]),
+        {"value": "NaN", "positive": "Infinity", "negative": "-Infinity"},
     )
 
 

@@ -8,7 +8,7 @@ import os
 import sys
 from collections.abc import Callable, Sequence
 from importlib.metadata import version
-from typing import Any, TextIO
+from typing import Any, NoReturn, TextIO
 
 from .bootstrap import DinaClient
 from .commands import COMMANDS
@@ -118,10 +118,16 @@ def _parameters(values: Sequence[str]) -> dict[str, Any]:
         if name in parameters:
             raise ValueError(f"Parameter specified more than once: {name}")
         try:
-            parameters[name] = json.loads(raw_value)
+            parameters[name] = json.loads(
+                raw_value, parse_constant=_invalid_json_constant
+            )
         except json.JSONDecodeError:
             parameters[name] = raw_value
     return parameters
+
+
+def _invalid_json_constant(value: str) -> NoReturn:
+    raise json.JSONDecodeError("Invalid JSON constant", value, 0)
 
 
 def _client(arguments: argparse.Namespace) -> DinaClient:

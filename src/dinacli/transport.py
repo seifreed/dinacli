@@ -44,6 +44,8 @@ class HttpTransport:
             port = parsed_endpoint.port
         except ValueError as error:
             raise DinaConfigurationError("Endpoint port is invalid") from error
+        if port == 0:
+            raise DinaConfigurationError("Endpoint port is invalid")
         self._connection_type = _CONNECTION_TYPES[parsed_endpoint.scheme]
         self._host = parsed_endpoint.hostname
         self._port = port

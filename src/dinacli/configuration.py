@@ -72,6 +72,8 @@ def _environment_or_config(
 
 
 def _timeout(value: Any) -> float:
+    if isinstance(value, bool):
+        raise DinaConfigurationError("Timeout must be numeric")
     try:
         return float(value)
     except (TypeError, ValueError) as error:
