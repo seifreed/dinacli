@@ -36,7 +36,9 @@ def _parser() -> argparse.ArgumentParser:
         description="Execute documented Dinahosting API commands."
     )
     parser.add_argument(
-        "--version", action="version", version=f"%(prog)s {version('dinacli')}"
+        "--version",
+        action="version",
+        version=f"%(prog)s {version('dinahosting-cli')}",
     )
     parser.add_argument("--config", help="TOML file with a [dina] section")
     parser.add_argument("--user", help="Dinahosting API user")
