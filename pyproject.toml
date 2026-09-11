@@ -3,7 +3,7 @@ requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dinacli"
+name = "dinahosting-cli"
 version = "0.1.0"
 description = "Python client for the Dinahosting API"
 readme = "README.md"

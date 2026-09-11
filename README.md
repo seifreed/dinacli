@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/dinacli-Dinahosting%20API-blue?style=for-the-badge" alt="dinacli">
+  <img src="https://img.shields.io/badge/dinahosting--cli-Dinahosting%20API-blue?style=for-the-badge" alt="dinahosting-cli">
 </p>
 
-<h1 align="center">dinacli</h1>
+<h1 align="center">dinahosting-cli</h1>
 
 <p align="center">
   <strong>Python 3.14 client and command-line interface for the Dinahosting API</strong>
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/dinacli/"><img src="https://img.shields.io/pypi/v/dinacli?style=flat-square&logo=pypi&logoColor=white" alt="PyPI Version"></a>
-  <a href="https://pypi.org/project/dinacli/"><img src="https://img.shields.io/pypi/pyversions/dinacli?style=flat-square&logo=python&logoColor=white" alt="Python Versions"></a>
+  <a href="https://pypi.org/project/dinahosting-cli/"><img src="https://img.shields.io/pypi/v/dinahosting-cli?style=flat-square&logo=pypi&logoColor=white" alt="PyPI Version"></a>
+  <a href="https://pypi.org/project/dinahosting-cli/"><img src="https://img.shields.io/pypi/pyversions/dinahosting-cli?style=flat-square&logo=python&logoColor=white" alt="Python Versions"></a>
   <a href="https://github.com/seifreed/dinacli/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"></a>
   <a href="https://github.com/seifreed/dinacli/stargazers"><img src="https://img.shields.io/github/stars/seifreed/dinacli?style=flat-square" alt="GitHub Stars"></a>
   <a href="https://github.com/seifreed/dinacli/issues"><img src="https://img.shields.io/github/issues/seifreed/dinacli?style=flat-square" alt="GitHub Issues"></a>
@@ -21,7 +21,7 @@
 
 ## Overview
 
-**dinacli** is a Python library and CLI for the Dinahosting API. It exposes the 485 documented API commands, validates their documented parameters, sends form-encoded requests through HTTPS, and returns typed responses.
+**dinahosting-cli** is a Python library and CLI for the Dinahosting API. It exposes the 485 documented API commands, validates their documented parameters, sends form-encoded requests through HTTPS, and returns typed responses.
 
 ### Key Features
 
@@ -53,7 +53,7 @@ Python access    exact API names and hierarchical namespaces
 After publication, install the package with:
 
 ```bash
-python -m pip install dinacli
+python -m pip install dinahosting-cli
 ```
 
 ### From Source
@@ -204,6 +204,7 @@ stored PyPI token. Before the first release, register a pending publisher in
 PyPI with the following values:
 
 ```text
+Project:     dinahosting-cli
 Owner:       seifreed
 Repository:  dinacli
 Workflow:    release.yml
